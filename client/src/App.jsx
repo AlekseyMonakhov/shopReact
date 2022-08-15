@@ -4,10 +4,11 @@ import Product from "./pages/Product";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import MobileMenu from "./components/MobileMenu";
 
 const App = () => {
   return (
-      <Cart/>
+      <Home/>
   );
 };
 

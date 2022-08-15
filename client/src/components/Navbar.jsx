@@ -1,19 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
-import {Search, ShoppingBagOutlined} from "@mui/icons-material";
+import {CloseRounded, Menu, Search, ShoppingBagOutlined} from "@mui/icons-material";
 import {Badge} from "@mui/material";
 import {mobile} from "../responsive";
+import MobileMenu from "./MobileMenu";
 
 const Container = styled.div`
-  height: 60px;
-  ${mobile({height: "50px"})};
+  height: fit-content;
+  padding: 10px 20px;
+  position: sticky;
+  z-index: 15;
+  top: -1px;
+  opacity: .9;
+  background-color: white;
+  ${mobile({padding: "5px"})};
 `;
 const Wrapper = styled.div`
-  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${mobile({padding: "10px 0"})};
 `;
 const Left = styled.div`
   display: flex;
@@ -32,7 +37,7 @@ const SearchContainer = styled.div`
   align-items: center;
   margin-left: 25px;
   padding: 5px;
-  ${mobile({marginLeft: "5px"})};
+  ${mobile({marginLeft: 0})};
 `;
 
 const Input = styled.input`
@@ -47,7 +52,7 @@ const Center = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
-  ${mobile({fontSize: "4vh"})};
+  ${mobile({fontSize: "32px"})};
 `;
 
 const Right = styled.div`
@@ -55,18 +60,33 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  ${mobile({flex: 2,justifyContent: "center"})};
+  ${mobile({flex: 1,justifyContent: "flex-start", flexDirection: "row-reverse"})};
 `;
 
 const MenuItem =styled.div`
   font-size: 14px;
   margin-left: 25px;
   cursor: pointer;
-  ${mobile({fontSize: "12px", marginLeft: "10px"})};
+  @media only screen and (max-width: 835px) {
+    &:not(:last-child) {
+      display: none;
+    }
+  }
 `;
 
+const MenuMobileButton = styled.div`
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 1s ease;
+  ${mobile({display: "flex", marginLeft: "10px"})};
+`;
 
 const Navbar = () => {
+    const [showMenu, setShowMenu] = useState(false);
+
+
     return (
         <Container>
             <Wrapper>
@@ -79,9 +99,11 @@ const Navbar = () => {
                 </Left>
                 <Center><Logo>IAMB</Logo></Center>
                 <Right>
-
                     <MenuItem>REGISTER</MenuItem>
                     <MenuItem>SIGN IN</MenuItem>
+                    <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
+                        {showMenu ? <CloseRounded/> : <Menu/>}
+                    </MenuMobileButton>
                     <MenuItem>
                         <Badge badgeContent={4} color="secondary">
                             <ShoppingBagOutlined />
@@ -89,6 +111,7 @@ const Navbar = () => {
                     </MenuItem>
                 </Right>
             </Wrapper>
+            {showMenu && MobileMenu(() => setShowMenu(!showMenu))}
         </Container>
     );
 };
