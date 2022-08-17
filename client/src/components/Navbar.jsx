@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
-import {CloseRounded, Menu, Search, ShoppingBagOutlined} from "@mui/icons-material";
-import {Badge} from "@mui/material";
-import {mobile} from "../responsive";
+import { CloseRounded, Menu, Search, ShoppingBagOutlined } from "@mui/icons-material";
+import { Badge } from "@mui/material";
+import { mobile } from "../responsive";
 import MobileMenu from "./MobileMenu";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 
 const Container = styled.div`
   height: fit-content;
@@ -13,7 +16,7 @@ const Container = styled.div`
   top: -1px;
   opacity: .9;
   background-color: white;
-  ${mobile({padding: "5px"})};
+  ${mobile({ padding: "5px" })};
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +31,7 @@ const Left = styled.div`
 const Language = styled.span`
   font-size: 14px;
   cursor: pointer;
-  ${mobile({display: "none"})};
+  ${mobile({ display: "none" })};
 `;
 
 const SearchContainer = styled.div`
@@ -37,12 +40,12 @@ const SearchContainer = styled.div`
   align-items: center;
   margin-left: 25px;
   padding: 5px;
-  ${mobile({marginLeft: 0})};
+  ${mobile({ marginLeft: 0 })};
 `;
 
 const Input = styled.input`
     border: none;
-    ${mobile({width: "50px"})};
+    ${mobile({ width: "50px" })};
 `;
 
 const Center = styled.div`
@@ -52,7 +55,7 @@ const Center = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
-  ${mobile({fontSize: "32px"})};
+  ${mobile({ fontSize: "32px" })};
 `;
 
 const Right = styled.div`
@@ -60,10 +63,10 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  ${mobile({flex: 1,justifyContent: "flex-start", flexDirection: "row-reverse"})};
+  ${mobile({ flex: 1, justifyContent: "flex-start", flexDirection: "row-reverse" })};
 `;
 
-const MenuItem =styled.div`
+const MenuItem = styled.div`
   font-size: 14px;
   margin-left: 25px;
   cursor: pointer;
@@ -80,40 +83,46 @@ const MenuMobileButton = styled.div`
   align-items: center;
   cursor: pointer;
   transition: all 1s ease;
-  ${mobile({display: "flex", marginLeft: "10px"})};
+  ${mobile({ display: "flex", marginLeft: "10px" })};
 `;
 
+
+
 const Navbar = () => {
-    const [showMenu, setShowMenu] = useState(false);
+
+  const quantity = useSelector(state => state.cart.quantity);
+  const [showMenu, setShowMenu] = useState(false);
 
 
-    return (
-        <Container>
-            <Wrapper>
-                <Left>
-                    <Language>EN</Language>
-                    <SearchContainer>
-                        <Input placeholder="Search"/>
-                        <Search style={{color: "gray", fontSize: 16}}/>
-                    </SearchContainer>
-                </Left>
-                <Center><Logo>IAMB</Logo></Center>
-                <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
-                    <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
-                        {showMenu ? <CloseRounded/> : <Menu/>}
-                    </MenuMobileButton>
-                    <MenuItem>
-                        <Badge badgeContent={4} color="secondary">
-                            <ShoppingBagOutlined />
-                        </Badge>
-                    </MenuItem>
-                </Right>
-            </Wrapper>
-            {showMenu && MobileMenu(() => setShowMenu(!showMenu))}
-        </Container>
-    );
+  return (
+    <Container>
+      <Wrapper>
+        <Left>
+          <Language>EN</Language>
+          <SearchContainer>
+            <Input placeholder="Search" />
+            <Search style={{ color: "gray", fontSize: 16 }} />
+          </SearchContainer>
+        </Left>
+        <Center><Logo>IAMB</Logo></Center>
+        <Right>
+          <MenuItem>REGISTER</MenuItem>
+          <MenuItem>SIGN IN</MenuItem>
+          <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
+            {showMenu ? <CloseRounded /> : <Menu />}
+          </MenuMobileButton>
+          <Link to={"/cart"}>
+            <MenuItem>
+              <Badge badgeContent={quantity} color="primary">
+                <ShoppingBagOutlined />
+              </Badge>
+            </MenuItem>
+          </Link>
+        </Right>
+      </Wrapper>
+      {showMenu && MobileMenu(() => setShowMenu(!showMenu))}
+    </Container>
+  );
 };
 
 export default Navbar;

@@ -31,6 +31,6 @@ app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/checkout", stripeRoute);
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log("server run on 3000 port");
+app.listen(process.env.PORT || 3001, () => {
+    console.log("server run on 3001 port");
 });
