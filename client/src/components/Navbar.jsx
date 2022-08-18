@@ -90,7 +90,7 @@ const MenuMobileButton = styled.div`
 
 const Navbar = () => {
 
-  const quantity = useSelector(state => state.cart.quantity);
+  const quantity = useSelector((state) => state.cart.quantity);
   const [showMenu, setShowMenu] = useState(false);
 
 

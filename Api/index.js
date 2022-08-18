@@ -28,8 +28,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
-app.use("/api/orders", orderRoute);
 app.use("/api/checkout", stripeRoute);
+app.use("/api/orders", orderRoute);
 
 app.listen(process.env.PORT || 3001, () => {
     console.log("server run on 3001 port");
