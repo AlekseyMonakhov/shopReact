@@ -1,15 +1,23 @@
 const mongoose = require("mongoose");
 
+
+const ProductVariant = new mongoose.Schema(
+    {
+        size: {type: String},
+        color: {type: String},
+        inStock: {type:Boolean, default: true},
+    },
+);
+
 const ProductSchema = new mongoose.Schema(
     {
         title: {type: String, required: true, unique: true},
         desc: {type: String, required: true,},
-        img: {type: String, required: true},
         categories: {type: Array},
-        size: {type: Array},
-        color: {type: Array},
+        img: {type: String, required: true},
+        variant: [{type:ProductVariant, required: true}],
         price: {type: Number, required: true},
-        inStock: {type:Boolean, default: true},
+        
     },
     {timestamps: true}
 );
