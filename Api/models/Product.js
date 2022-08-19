@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 
 const ProductVariant = new mongoose.Schema(
     {
-        size: {type: String},
-        color: {type: String},
+        size: {type: String, required: true},
+        color: {type: String, required: true},
         inStock: {type:Boolean, default: true},
     },
 );
