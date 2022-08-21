@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { changeQuantity } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
+
 
 
 const KEY = "pk_test_51LXUoZKHAec9sp94Zo06fxkHbT4JU5tISbgONVRgeNYJU0wvAVKZ9p3vRrYeGPXDDIWU1rqHear5aJTDLPjxaoKL00VyzCyFxF";
@@ -163,6 +166,7 @@ const Cart = () => {
   const cart = useSelector(state => state.cart);
   const [stripeToken, setStripeToken] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onToken = (token) => {
     setStripeToken(token);
   };
@@ -185,7 +189,9 @@ const Cart = () => {
     }
     stripeToken && cart.total > 1 && makeRequest();
   }, [stripeToken, cart.total, navigate, cart]);
-console.log(cart);
+  const setQuantity = (type, id) => {
+    dispatch(changeQuantity({type, id}));
+  };
 
   return (
     <Container>
@@ -218,9 +224,9 @@ console.log(cart);
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                    <Add style={{ cursor: "pointer" }} onClick={() => setQuantity("add", product._id)} />
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <Remove style={{ cursor: "pointer" }} onClick={() => setQuantity("remove", product._id)} />
                   </ProductAmountContainer>
                   <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                 </PriceDetail>

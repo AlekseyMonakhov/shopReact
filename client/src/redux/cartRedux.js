@@ -29,9 +29,29 @@ const cartSlice = createSlice({
                     break;
             }
         },
+        changeQuantity: (state, action) => {
+            let item = state.products.find((product) => product._id === action.payload.id);
+            
+            switch (action.payload.type) {
+                case "add":
+                    state.quantity += 1;
+                    item.quantity +=1;
+                    state.total += item.price;
+                    break;
+
+                default:
+                    state.quantity -= 1;
+                    item.quantity -=1;
+                    state.total -= item.price;
+                    break;
+            }
+            if(item.quantity === 0) {
+                state.products.splice(state.products.indexOf(item), 1);
+            }
+        }
     },
 });
 
 
-export const { addProduct } = cartSlice.actions;
+export const { addProduct, changeQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
