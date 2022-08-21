@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   position: fixed;
@@ -20,29 +21,37 @@ const MenuTitle = styled.h2`
   font-weight: 600;
 `;
 const MenuLinks = styled.div``;
-const MenuLink = styled.a`
+const MenuLink = styled.h5`
   cursor: pointer;
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
 `;
 
 
 
 const MobileMenu = (props) => {
-    return (
-        <Container>
-            <Wrapper>
-                <MenuTitle>IAMB</MenuTitle>
-                <MenuLinks>
-                    <MenuLink>LOGIN</MenuLink>
-                </MenuLinks>
-                <MenuLinks>
-                    <MenuLink>REGISTER</MenuLink>
-                </MenuLinks>
-                <MenuLinks onClick={props}>
-                    <MenuLink>CLOSE</MenuLink>
-                </MenuLinks>
-            </Wrapper>
-        </Container>
-    );
+  return (
+    <Container>
+      <Wrapper>
+        <MenuTitle>IAMB</MenuTitle>
+        <MenuLinks>
+          <StyledLink to={"/login"}>
+            <MenuLink>LOGIN</MenuLink>
+          </StyledLink>
+        </MenuLinks>
+        <MenuLinks>
+          <StyledLink to={"register"}>
+            <MenuLink>REGISTER</MenuLink>
+          </StyledLink>
+        </MenuLinks>
+        <MenuLinks onClick={props}>
+          <MenuLink>CLOSE</MenuLink>
+        </MenuLinks>
+      </Wrapper>
+    </Container>
+  );
 };
 
 export default MobileMenu;

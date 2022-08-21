@@ -1,7 +1,41 @@
+import { userRequest } from "../requestMethods";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import { userRequest } from "../requestMethods";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+
+const Container = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100vh;
+`;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 50px;
+  padding: 50px;
+  text-align:center;
+`;
+const HomeButton = styled.button`
+  padding: 10px;
+  color: white;
+  background-color:black;
+  font-size: 18px;
+  border-radius: 14px;
+  cursor:pointer;
+
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
 const Success = () => {
   const location = useLocation();
@@ -14,7 +48,7 @@ const Success = () => {
   useEffect(() => {
     const createOrder = async () => {
       try {
-        const res = await userRequest.post("/orders", {
+        const res = await userRequest?.post("/orders", {
           userId: currentUser._id,
           products: cart.products.map((item) => ({
             productId: item._id,
@@ -25,30 +59,30 @@ const Success = () => {
         });
         console.log(res);
         setOrderId(res.data._id);
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     };
     data && createOrder();
   }, [cart, data, currentUser]);
-  
-  console.log(orderId);
+
+  console.log(cart);
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {orderId
-        ? `Order has been created successfully. Your order number is ${orderId}`
-        : `Successfull. Your order is being prepared...`}
-      <button style={{ padding: 10, marginTop: 20 }}>Go to Homepage</button>
-    </div>
+    <Container>
+      <Navbar />
+      <Content>
+        {orderId
+          ? <h4>Order has been created successfully. Your order ID is ${orderId}</h4>
+          : <h4>Successfull. Your order is being prepared...</h4>}
+        <StyledLink to={"/"}>
+          <HomeButton>Return to main</HomeButton>
+        </StyledLink>
+      </Content>
+      <Footer />
+    </Container>
+
+
   );
 };
 

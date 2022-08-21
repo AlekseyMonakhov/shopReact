@@ -127,6 +127,7 @@ const Product = () => {
   const id = location.pathname.split("/")[2];
 
   const [product, setProduct] = useState({});
+  const [productVariant, SetProductVariant] = useState();
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
@@ -138,6 +139,7 @@ const Product = () => {
       try {
         const res = await publicRequest.get("/products/find/" + id);
         setProduct(res.data);
+        SetProductVariant(res.data.variant);
       } catch (err) {
         console.log(err);
       }
@@ -152,7 +154,8 @@ const Product = () => {
 
 
   const handleClick = () => {
-    dispatch(addProduct({ ...product, quantity, color, size }));
+    const _id = productVariant[0]._id;
+    dispatch(addProduct({ ...product, quantity, color, size, _id }));
   };
   return (
     <Container>
@@ -170,14 +173,18 @@ const Product = () => {
             <Filter>
               <FilterTitle>Color</FilterTitle>
               {product.variant?.map((v) => (
-                <FilterColor color={v.color} key={v.color} onClick={() => setColor(v.color)}/>
+                <FilterColor color={v.color} key={v.color} onClick={() => {
+                  let selectedVariant = product.variant.find(el=> el.color === v.color);
+                  setColor(v.color);
+                  SetProductVariant([selectedVariant]);
+                }} />
               ))}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize onChange={(e) => setSize(e.target.value)}>
-                {product.variant?.map((v) => (
-                  <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
+              <FilterSize onClick={(e) => setSize(e.target.value)}>
+                {productVariant?.map((v) => (
+                  <FilterSizeOption defaultValue={v.size} key={v.size}>{v.size}</FilterSizeOption>
                 ))}
               </FilterSize>
             </Filter>

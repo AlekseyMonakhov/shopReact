@@ -86,6 +86,11 @@ const MenuMobileButton = styled.div`
   ${mobile({ display: "flex", marginLeft: "10px" })};
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
+
 
 
 const Navbar = () => {
@@ -111,13 +116,13 @@ const Navbar = () => {
           <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
             {showMenu ? <CloseRounded /> : <Menu />}
           </MenuMobileButton>
-          <Link to={"/cart"}>
+          <StyledLink to={"/cart"}>
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
                 <ShoppingBagOutlined />
               </Badge>
             </MenuItem>
-          </Link>
+          </StyledLink>
         </Right>
       </Wrapper>
       {showMenu && MobileMenu(() => setShowMenu(!showMenu))}
