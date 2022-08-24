@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import { Add, Remove } from "@mui/icons-material";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { publicRequest } from "../requestMethods";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 `;
 
 const ImgContainer = styled.div`
-  flex: 2;
+  flex: 1;
 `;
 
 const Image = styled.img`
@@ -55,9 +55,10 @@ const FilterContainer = styled.div`
   ${mobile({ width: "100%" })};
 `;
 
-const Filter = styled.div`
+const Filter = styled.fieldset`
   display: flex;
-  padding: 5px;
+  border: none;
+  gap: 5px;
   align-items: center;
   ${mobile({ padding: "2px" })};
 `;
@@ -67,13 +68,22 @@ const FilterTitle = styled.span`
   font-weight: 200;
 `;
 
-const FilterColor = styled.div`
+const FilterColor = styled.input.attrs(props => ({
+  type: "radio",
+  name: "color",
+  id: props.color,
+}))`
+display: none;
+&:checked+label {
+  scale: 125%;
+}
+`;
+const FilterLabel = styled.label`
   width: 20px;
   height: 20px;
   border: 1px solid black;
   border-radius: 50%;
   background-color: ${props => props.color};
-  margin: 0 5px;
   cursor: pointer;
 `;
 
@@ -111,7 +121,8 @@ const Amount = styled.span`
 `;
 
 const Button = styled.button`
-  padding: 15px;
+  width: 125px;
+  height: 50px;
   border: 2px solid teal;
   background-color: white;
   cursor: pointer;
@@ -122,6 +133,22 @@ const Button = styled.button`
   }
 `;
 
+const ChoseSizeAndColor = styled.button`
+  width: 125px;
+  height: 50px;
+  border: 2px solid teal;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: #ffdbd1;
+    border: 2px solid black;
+  }
+`;
+
+
+
 const Product = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
@@ -130,7 +157,7 @@ const Product = () => {
   const [productVariant, SetProductVariant] = useState();
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState();
   const dispatch = useDispatch();
 
 
@@ -153,10 +180,12 @@ const Product = () => {
   };
 
 
+
   const handleClick = () => {
     const _id = productVariant[0]._id;
     dispatch(addProduct({ ...product, quantity, color, size, _id }));
   };
+  console.log(size);
   return (
     <Container>
       <Navbar />
@@ -172,19 +201,23 @@ const Product = () => {
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              {product.variant?.map((v) => (
-                <FilterColor color={v.color} key={v.color} onClick={() => {
-                  let selectedVariant = product.variant.find(el=> el.color === v.color);
-                  setColor(v.color);
-                  SetProductVariant([selectedVariant]);
-                }} />
+              {product.variant?.map((v, index) => (
+                <React.Fragment key={v._id}>
+                  <FilterColor color={v.color} key={v.color} onClick={() => {
+                    let selectedVariant = product.variant.find(el => el.color === v.color);
+                    setColor(v.color);
+                    setSize(undefined);
+                    SetProductVariant([selectedVariant]);
+                  }} />
+                  <FilterLabel htmlFor={v.color} color={v.color} key={index} />
+                </React.Fragment>
               ))}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
               <FilterSize onClick={(e) => setSize(e.target.value)}>
                 {productVariant?.map((v) => (
-                  <FilterSizeOption defaultValue={v.size} key={v.size}>{v.size}</FilterSizeOption>
+                  <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
                 ))}
               </FilterSize>
             </Filter>
@@ -195,7 +228,11 @@ const Product = () => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button onClick={handleClick}>ADD TO CART</Button>
+            {
+              (size && color)
+                ? <Button onClick={handleClick}>ADD TO CART</Button>
+                : <ChoseSizeAndColor style={{fontSize:"12px"}}>Chose size and color</ChoseSizeAndColor>
+            }
           </AddContainer>
         </InfoContainer>
       </Wrapper>

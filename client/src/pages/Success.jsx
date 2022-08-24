@@ -1,4 +1,3 @@
-import { userRequest } from "../requestMethods";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -6,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 
 const Container = styled.div`
@@ -40,33 +40,31 @@ const StyledLink = styled(Link)`
 const Success = () => {
   const location = useLocation();
   const data = location.state.stripeData;
-  const cart = location.state.cart;
+  const accessToken = location.state.accessToken;
+  const cart = useSelector((state) => state.cart);
   const currentUser = useSelector((state) => state.user.currentUser);
-  console.log(currentUser);
   const [orderId, setOrderId] = useState(null);
-  console.log(data);
   useEffect(() => {
     const createOrder = async () => {
       try {
-        const res = await userRequest?.post("/orders", {
+        const res = await axios.post("http://localhost:3001/api/orders", {
           userId: currentUser._id,
           products: cart.products.map((item) => ({
             productId: item._id,
-            quantity: item._quantity,
+            quantity: item.quantity,
           })),
           amount: cart.total,
           address: data.billing_details.address,
-        });
-        console.log(res);
+        }, { headers: { token: `Bearer ${accessToken}` }, });
         setOrderId(res.data._id);
       } catch (err) {
         console.log(err);
       }
     };
-    data && createOrder();
-  }, [cart, data, currentUser]);
+    data && cart && createOrder();
+    
+  }, [cart, data, currentUser, accessToken]);
 
-  console.log(cart);
 
   return (
     <Container>
@@ -74,7 +72,7 @@ const Success = () => {
       <Content>
         {orderId
           ? <h4>Order has been created successfully. Your order ID is ${orderId}</h4>
-          : <h4>Successfull. Your order is being prepared...</h4>}
+          : <h4>Something whent wrong...</h4>}
         <StyledLink to={"/"}>
           <HomeButton>Return to main</HomeButton>
         </StyledLink>

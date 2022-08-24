@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import React from "react";
 
 const Container = styled.div`
   position: fixed;
@@ -31,21 +32,31 @@ const StyledLink = styled(Link)`
 
 
 
-const MobileMenu = (props) => {
+const MobileMenu = (props, currentUser) => {
+  console.log(currentUser);
   return (
     <Container>
       <Wrapper>
         <MenuTitle>IAMB</MenuTitle>
-        <MenuLinks>
-          <StyledLink to={"/login"}>
-            <MenuLink>LOGIN</MenuLink>
-          </StyledLink>
-        </MenuLinks>
-        <MenuLinks>
-          <StyledLink to={"register"}>
-            <MenuLink>REGISTER</MenuLink>
-          </StyledLink>
-        </MenuLinks>
+        {!currentUser
+          ? <React.Fragment>
+            <MenuLinks>
+              <StyledLink to={"/login"}>
+                <MenuLink>LOGIN</MenuLink>
+              </StyledLink>
+            </MenuLinks>
+            <MenuLinks>
+              <StyledLink to={"register"}>
+                <MenuLink>REGISTER</MenuLink>
+              </StyledLink>
+            </MenuLinks>
+          </React.Fragment>
+          : <MenuLinks>
+            <StyledLink to={"/login"}>
+              <MenuLink>LOGOUT</MenuLink>
+            </StyledLink>
+          </MenuLinks>
+        }
         <MenuLinks onClick={props}>
           <MenuLink>CLOSE</MenuLink>
         </MenuLinks>

@@ -89,6 +89,10 @@ const MenuMobileButton = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
+  padding: 10px;
+  &:not(:last-child) {
+    ${mobile({ display: "none"})};
+  }
 `;
 
 
@@ -96,6 +100,7 @@ const StyledLink = styled(Link)`
 const Navbar = () => {
 
   const quantity = useSelector((state) => state.cart.quantity);
+  const currentUser = !!useSelector((state) => state.user.currentUser);
   const [showMenu, setShowMenu] = useState(false);
 
 
@@ -111,8 +116,13 @@ const Navbar = () => {
         </Left>
         <Center><Logo>IAMB</Logo></Center>
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
+          {!currentUser
+            ? <React.Fragment>
+              <StyledLink to={"/register"}>REGISTER</StyledLink>
+              <StyledLink to={"/login"}>SIGN IN</StyledLink>
+            </React.Fragment>
+            : <MenuItem>LOGOUT</MenuItem>
+          }
           <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
             {showMenu ? <CloseRounded /> : <Menu />}
           </MenuMobileButton>
@@ -125,7 +135,7 @@ const Navbar = () => {
           </StyledLink>
         </Right>
       </Wrapper>
-      {showMenu && MobileMenu(() => setShowMenu(!showMenu))}
+      {showMenu && MobileMenu(() => setShowMenu(!showMenu),currentUser)}
     </Container>
   );
 };
