@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { FavoriteBorderOutlined, SearchOutlined } from "@mui/icons-material";
 import {Link} from "react-router-dom";
+import { addProduct } from "../redux/favoritesRedux";
+import { useDispatch } from "react-redux";
 
 const Info = styled.div`
   opacity: 0;
@@ -65,6 +67,10 @@ const Icon = styled.div`
 
 
 const Product = ({ item }) => {
+  const dispatch = useDispatch();
+  const addToFavorites = (prod) => {
+    dispatch(addProduct(prod))
+  };
   return (
     <Container>
       <Circle />
@@ -75,7 +81,7 @@ const Product = ({ item }) => {
             <SearchOutlined />
           </Link>
         </Icon>
-        <Icon>
+        <Icon onClick={() => addToFavorites(item)}>
           <FavoriteBorderOutlined />
         </Icon>
       </Info>

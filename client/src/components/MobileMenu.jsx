@@ -32,7 +32,7 @@ const StyledLink = styled(Link)`
 
 
 
-const MobileMenu = (props, currentUser) => {
+const MobileMenu = (props, currentUser, logout) => {
   console.log(currentUser);
   return (
     <Container>
@@ -52,9 +52,7 @@ const MobileMenu = (props, currentUser) => {
             </MenuLinks>
           </React.Fragment>
           : <MenuLinks>
-            <StyledLink to={"/login"}>
-              <MenuLink>LOGOUT</MenuLink>
-            </StyledLink>
+            <MenuLink onClick={logout}>LOGOUT</MenuLink>
           </MenuLinks>
         }
         <MenuLinks onClick={props}>

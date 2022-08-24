@@ -6,6 +6,9 @@ import { mobile } from "../responsive";
 import MobileMenu from "./MobileMenu";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logOut } from "../redux/userRedux";
+import { FavoriteBorderOutlined } from "@mui/icons-material";
 
 
 const Container = styled.div`
@@ -68,13 +71,12 @@ const Right = styled.div`
 
 const MenuItem = styled.div`
   font-size: 14px;
-  margin-left: 25px;
   cursor: pointer;
-  @media only screen and (max-width: 835px) {
-    &:not(:last-child) {
-      display: none;
-    }
-  }
+`;
+const LogoutBtn = styled.div`
+  font-size: 14px;
+  cursor: pointer;
+  ${mobile({ display: "none" })};
 `;
 
 const MenuMobileButton = styled.div`
@@ -90,8 +92,11 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
   padding: 10px;
-  &:not(:last-child) {
-    ${mobile({ display: "none"})};
+  &:nth-child(1) {
+    ${mobile({ display: "none" })};
+  }
+  &:nth-child(2) {
+    ${mobile({ display: "none" })};
   }
 `;
 
@@ -99,9 +104,14 @@ const StyledLink = styled(Link)`
 
 const Navbar = () => {
 
-  const quantity = useSelector((state) => state.cart.quantity);
+  const quantityCart = useSelector((state) => state.cart.quantity);
+  const quantityFavorite = useSelector((state) => state.favorite.quantity);
   const currentUser = !!useSelector((state) => state.user.currentUser);
   const [showMenu, setShowMenu] = useState(false);
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(logOut());
+  };
 
 
   return (
@@ -114,28 +124,36 @@ const Navbar = () => {
             <Search style={{ color: "gray", fontSize: 16 }} />
           </SearchContainer>
         </Left>
-        <Center><Logo>IAMB</Logo></Center>
+        <Center><Logo>Shop</Logo></Center>
         <Right>
           {!currentUser
-            ? <React.Fragment>
+            ?
+            <React.Fragment>
               <StyledLink to={"/register"}>REGISTER</StyledLink>
               <StyledLink to={"/login"}>SIGN IN</StyledLink>
             </React.Fragment>
-            : <MenuItem>LOGOUT</MenuItem>
+            : <LogoutBtn onClick={() => logout()}>LOGOUT</LogoutBtn>
           }
           <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
             {showMenu ? <CloseRounded /> : <Menu />}
           </MenuMobileButton>
+          <StyledLink to={"/"}>
+            <MenuItem>
+              <Badge badgeContent={quantityFavorite} color="primary">
+                <FavoriteBorderOutlined />
+              </Badge>
+            </MenuItem>
+          </StyledLink>
           <StyledLink to={"/cart"}>
             <MenuItem>
-              <Badge badgeContent={quantity} color="primary">
+              <Badge badgeContent={quantityCart} color="primary">
                 <ShoppingBagOutlined />
               </Badge>
             </MenuItem>
           </StyledLink>
         </Right>
       </Wrapper>
-      {showMenu && MobileMenu(() => setShowMenu(!showMenu),currentUser)}
+      {showMenu && MobileMenu(() => setShowMenu(!showMenu), currentUser, () => logout())}
     </Container>
   );
 };

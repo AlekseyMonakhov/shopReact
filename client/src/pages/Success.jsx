@@ -6,6 +6,8 @@ import { useLocation } from "react-router";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { clearCart } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 
 const Container = styled.div`
@@ -44,6 +46,10 @@ const Success = () => {
   const cart = useSelector((state) => state.cart);
   const currentUser = useSelector((state) => state.user.currentUser);
   const [orderId, setOrderId] = useState(null);
+  const dispatch = useDispatch();
+  const clear = () => {
+    dispatch(clearCart());
+  };
   useEffect(() => {
     const createOrder = async () => {
       try {
@@ -57,14 +63,15 @@ const Success = () => {
           address: data.billing_details.address,
         }, { headers: { token: `Bearer ${accessToken}` }, });
         setOrderId(res.data._id);
+        clear();
       } catch (err) {
         console.log(err);
       }
     };
-    data && cart && createOrder();
+    data && cart.total && createOrder();
+      
     
   }, [cart, data, currentUser, accessToken]);
-
 
   return (
     <Container>
@@ -72,7 +79,7 @@ const Success = () => {
       <Content>
         {orderId
           ? <h4>Order has been created successfully. Your order ID is ${orderId}</h4>
-          : <h4>Something whent wrong...</h4>}
+          : <h4>No orders yet...</h4>}
         <StyledLink to={"/"}>
           <HomeButton>Return to main</HomeButton>
         </StyledLink>

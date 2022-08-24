@@ -31,27 +31,32 @@ const cartSlice = createSlice({
         },
         changeQuantity: (state, action) => {
             let item = state.products.find((product) => product._id === action.payload.id);
-            
+
             switch (action.payload.type) {
                 case "add":
                     state.quantity += 1;
-                    item.quantity +=1;
+                    item.quantity += 1;
                     state.total += item.price;
                     break;
 
                 default:
                     state.quantity -= 1;
-                    item.quantity -=1;
+                    item.quantity -= 1;
                     state.total -= item.price;
                     break;
             }
-            if(item.quantity === 0) {
+            if (item.quantity === 0) {
                 state.products.splice(state.products.indexOf(item), 1);
             }
+        },
+        clearCart: (state, action) => {
+            state.products.length = 0;
+            state.quantity = 0;
+            state.total = 0;
         }
     },
 });
 
 
-export const { addProduct, changeQuantity } = cartSlice.actions;
+export const { addProduct, changeQuantity, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

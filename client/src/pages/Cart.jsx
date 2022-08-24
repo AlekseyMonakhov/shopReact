@@ -177,6 +177,7 @@ const Cart = () => {
 
   const cart = useSelector(state => state.cart);
   const user = useSelector(state => state.user);
+  const quantityFavorite = useSelector((state) => state.favorite.quantity);
   const [stripeToken, setStripeToken] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -223,7 +224,7 @@ const Cart = () => {
           </Link>
           <TopTexts>
             <TopText>Shopping Bag({cart.quantity})</TopText>
-            <TopText>Your Wishlist(0)</TopText>
+            <TopText>Your Wishlist({quantityFavorite})</TopText>
           </TopTexts>
         </Top>
         {cart.quantity

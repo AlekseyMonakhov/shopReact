@@ -154,10 +154,10 @@ const Product = () => {
   const id = location.pathname.split("/")[2];
 
   const [product, setProduct] = useState({});
-  const [productVariant, SetProductVariant] = useState();
+  const [productVariant, SetProductVariant] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
-  const [size, setSize] = useState();
+  const [size, setSize] = useState("");
   const dispatch = useDispatch();
 
 
@@ -215,7 +215,7 @@ const Product = () => {
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize onClick={(e) => setSize(e.target.value)}>
+              <FilterSize defaultValue={productVariant[0]?.size} onClick={(e) => setSize(e.target.value)}>
                 {productVariant?.map((v) => (
                   <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
                 ))}
