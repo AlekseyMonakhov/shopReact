@@ -98,10 +98,7 @@ const StyledLink = styled(Link)`
   font-size: 14px;
   cursor: pointer;
   padding: 10px;
-  &:nth-child(1) {
-    ${mobile({ display: "none" })};
-  }
-  &:nth-child(2) {
+  &:nth-child(1), &:nth-child(2) {
     ${mobile({ display: "none" })};
   }
 `;

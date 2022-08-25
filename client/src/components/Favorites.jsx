@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { CloseRounded } from "@mui/icons-material";
 import React from "react";
+import { mobile } from "../responsive";
 
 
 const StyledLink = styled(Link)`
@@ -18,6 +19,7 @@ const Container = styled.div`
 	z-index: 15;
 	background-color: white;
 	padding: 50px 15px;
+	${mobile({ width: "100vw" })};
 `;
 const Wrapper = styled.div`
 	display: flex;
@@ -26,18 +28,21 @@ const Wrapper = styled.div`
 const FavoriteItem = styled.div`
 	position: relative;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
+	gap: 5%;
 	padding: 10px;
+	border-top: 1px solid #a8aaad;
+	${mobile({ padding: "5px" })};
 `
 const ItemImg = styled.img`
 	aspect-ratio: 3/4;
-	max-height: 100px;
+	max-height: 75px;
 `;
 const ItemTitle = styled.h5`
  font-size: 18px;
  color: black;
  font-weight: 600;
+ ${mobile({ fontSize: "12px" })};
 `;
 const Close = styled.div`
 	position: absolute;
@@ -47,6 +52,12 @@ const Close = styled.div`
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
+	@media only screen and (max-width: 835px) {
+        h5+&{
+		top: 0;
+		right: 0;
+		}
+    }
 `;
 
 const Favorites = (item, toggler, remove) => {
@@ -54,17 +65,21 @@ const Favorites = (item, toggler, remove) => {
 	return (
 		<Container>
 			<Wrapper>
-				{item.map((i) => (
-					<FavoriteItem key={i._id}>
-						<StyledLink to={`/product/${i._id}`}>
-							<ItemImg src={i.img} />
-						</StyledLink>
-						<ItemTitle>{i.title}</ItemTitle>
-						<Close onClick={() => remove(i)}>
-							<CloseRounded />
-						</Close>
-					</FavoriteItem>
-				))}
+				<h4 style={{ padding: "10px" }}>Favorite</h4>
+				{item.length ?
+					item.map((i) => (
+						<FavoriteItem key={i._id}>
+							<StyledLink to={`/product/${i._id}`}>
+								<ItemImg src={i.img} />
+							</StyledLink>
+							<ItemTitle>{i.title}</ItemTitle>
+							<Close onClick={() => remove(i)}>
+								<CloseRounded />
+							</Close>
+						</FavoriteItem>
+					))
+					: <h4 style={{ padding: "20px", textAlign: "center" }}>Empty yet...</h4>
+				}
 				<Close onClick={toggler}>
 					<CloseRounded />
 				</Close>
