@@ -79,7 +79,7 @@ const Success = () => {
       <Content>
         {orderId
           ? <h4>Order has been created successfully. Your order ID is ${orderId}</h4>
-          : <h4>No orders yet...</h4>}
+          : <h4>No new orders yet...</h4>}
         <StyledLink to={"/"}>
           <HomeButton>Return to main</HomeButton>
         </StyledLink>

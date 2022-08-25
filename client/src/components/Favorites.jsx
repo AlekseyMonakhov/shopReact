@@ -39,10 +39,10 @@ const ItemImg = styled.img`
 	max-height: 75px;
 `;
 const ItemTitle = styled.h5`
- font-size: 18px;
- color: black;
- font-weight: 600;
- ${mobile({ fontSize: "12px" })};
+	font-size: 18px;
+	color: black;
+	font-weight: 600;
+	${mobile({ fontSize: "12px" })};
 `;
 const Close = styled.div`
 	position: absolute;
@@ -54,8 +54,8 @@ const Close = styled.div`
 	cursor: pointer;
 	@media only screen and (max-width: 835px) {
         h5+&{
-		top: 0;
-		right: 0;
+		top: 10px;
+		right: 10px;
 		}
     }
 `;
@@ -65,7 +65,7 @@ const Favorites = (item, toggler, remove) => {
 	return (
 		<Container>
 			<Wrapper>
-				<h4 style={{ padding: "10px" }}>Favorite</h4>
+				<h4 style={{ padding: "10px", borderBottom: "1px solid grey" }}>Favorite</h4>
 				{item.length ?
 					item.map((i) => (
 						<FavoriteItem key={i._id}>
@@ -78,7 +78,7 @@ const Favorites = (item, toggler, remove) => {
 							</Close>
 						</FavoriteItem>
 					))
-					: <h4 style={{ padding: "20px", textAlign: "center" }}>Empty yet...</h4>
+					: <h5 style={{ padding: "20px", textAlign: "center", letterSpacing: "5px", fontSize: "24px" }}>Empty yet...</h5>
 				}
 				<Close onClick={toggler}>
 					<CloseRounded />

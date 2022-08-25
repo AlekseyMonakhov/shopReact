@@ -109,7 +109,7 @@ const Navbar = () => {
 
   const quantityCart = useSelector((state) => state.cart.quantity);
   const favorite = useSelector((state) => state.favorite);
-  const currentUser = !!useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser?._id);
   const [showMenu, setShowMenu] = useState(false);
   const [showFavorite, setShowFavorite] = useState(false);
   const dispatch = useDispatch();
@@ -139,7 +139,13 @@ const Navbar = () => {
               <StyledLink to={"/register"}>REGISTER</StyledLink>
               <StyledLink to={"/login"}>SIGN IN</StyledLink>
             </React.Fragment>
-            : <LogoutBtn onClick={() => logout()}>LOGOUT</LogoutBtn>
+            :
+            <React.Fragment>
+              <StyledLink to={"/"}>
+                <LogoutBtn onClick={() => logout()}>LOGOUT</LogoutBtn>
+              </StyledLink>
+              <StyledLink to={`/cabinet/${currentUser}`}>CABINET</StyledLink>
+            </React.Fragment>
           }
           <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
             {showMenu ? <CloseRounded /> : <Menu />}

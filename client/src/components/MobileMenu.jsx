@@ -45,14 +45,25 @@ const MobileMenu = (props, currentUser, logout) => {
               </StyledLink>
             </MenuLinks>
             <MenuLinks>
-              <StyledLink to={"register"}>
+              <StyledLink to={"/register"}>
                 <MenuLink>REGISTER</MenuLink>
               </StyledLink>
             </MenuLinks>
           </React.Fragment>
-          : <MenuLinks>
-            <MenuLink onClick={logout}>LOGOUT</MenuLink>
-          </MenuLinks>
+          :
+          <React.Fragment>
+            <MenuLinks>
+              <StyledLink to={"/"}>
+                <MenuLink onClick={logout}>LOGOUT</MenuLink>
+              </StyledLink>
+            </MenuLinks>
+            <MenuLinks>
+              <StyledLink to={`/cabinet/${currentUser}`}>
+                <MenuLink>CABINET</MenuLink>
+              </StyledLink>
+            </MenuLinks>
+          </React.Fragment>
+
         }
         <MenuLinks onClick={props}>
           <MenuLink>CLOSE</MenuLink>
