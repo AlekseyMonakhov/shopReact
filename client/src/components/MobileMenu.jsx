@@ -33,7 +33,6 @@ const StyledLink = styled(Link)`
 
 
 const MobileMenu = (props, currentUser, logout) => {
-  console.log(currentUser);
   return (
     <Container>
       <Wrapper>

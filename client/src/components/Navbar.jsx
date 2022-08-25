@@ -4,11 +4,14 @@ import { CloseRounded, Menu, Search, ShoppingBagOutlined } from "@mui/icons-mate
 import { Badge } from "@mui/material";
 import { mobile } from "../responsive";
 import MobileMenu from "./MobileMenu";
+import Favorites from "./Favorites";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logOut } from "../redux/userRedux";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
+import { removeProduct } from "../redux/favoritesRedux";
+
 
 
 const Container = styled.div`
@@ -72,6 +75,7 @@ const Right = styled.div`
 const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
+  padding: 10px;
 `;
 const LogoutBtn = styled.div`
   font-size: 14px;
@@ -91,6 +95,8 @@ const MenuMobileButton = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
+  font-size: 14px;
+  cursor: pointer;
   padding: 10px;
   &:nth-child(1) {
     ${mobile({ display: "none" })};
@@ -105,12 +111,16 @@ const StyledLink = styled(Link)`
 const Navbar = () => {
 
   const quantityCart = useSelector((state) => state.cart.quantity);
-  const quantityFavorite = useSelector((state) => state.favorite.quantity);
+  const favorite = useSelector((state) => state.favorite);
   const currentUser = !!useSelector((state) => state.user.currentUser);
   const [showMenu, setShowMenu] = useState(false);
+  const [showFavorite, setShowFavorite] = useState(false);
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logOut());
+  };
+  const removeFavorites = (item) => {
+    dispatch(removeProduct(item));
   };
 
 
@@ -137,23 +147,20 @@ const Navbar = () => {
           <MenuMobileButton onClick={() => setShowMenu(!showMenu)}>
             {showMenu ? <CloseRounded /> : <Menu />}
           </MenuMobileButton>
-          <StyledLink to={"/"}>
-            <MenuItem>
-              <Badge badgeContent={quantityFavorite} color="primary">
-                <FavoriteBorderOutlined />
-              </Badge>
-            </MenuItem>
-          </StyledLink>
+          <MenuItem onClick={() => setShowFavorite(!showFavorite)}>
+            <Badge badgeContent={favorite.quantity} color="primary">
+              <FavoriteBorderOutlined />
+            </Badge>
+          </MenuItem>
           <StyledLink to={"/cart"}>
-            <MenuItem>
-              <Badge badgeContent={quantityCart} color="primary">
-                <ShoppingBagOutlined />
-              </Badge>
-            </MenuItem>
+            <Badge badgeContent={quantityCart} color="primary">
+              <ShoppingBagOutlined />
+            </Badge>
           </StyledLink>
         </Right>
       </Wrapper>
       {showMenu && MobileMenu(() => setShowMenu(!showMenu), currentUser, () => logout())}
+      {showFavorite && Favorites(favorite.products, () => setShowFavorite(!showFavorite), removeFavorites)}
     </Container>
   );
 };

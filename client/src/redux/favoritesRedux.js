@@ -14,9 +14,14 @@ const favoriteSlice = createSlice({
                 state.quantity += 1;
             }
         },
+        removeProduct: (state, action) => {
+            let item = state.products.find((product) => product._id === action.payload.id);
+            state.products.splice(state.products.indexOf(item), 1);
+            state.quantity -= 1;
+        },
     },
 });
 
 
-export const { addProduct } = favoriteSlice.actions;
+export const { addProduct, removeProduct } = favoriteSlice.actions;
 export default favoriteSlice.reducer;
