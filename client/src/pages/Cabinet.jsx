@@ -38,6 +38,17 @@ const ClientOrder = styled.div`
 const ClientOrderId = styled.h5`
     color: black;
     font-size: 16px;
+    border-bottom: 1px solid grey;
+`;
+const ClientOrderDesc = styled.p`
+    color: black;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    ::first-letter{
+        font-size: 22px;
+        font-weight: 600;
+    }
 `;
 
 
@@ -71,10 +82,10 @@ const Cabinet = () => {
                     {orders.map((order) => (
                         <ClientOrder key={order._id}>
                             <ClientOrderId>Order id: {order._id}</ClientOrderId>
-                            <p>amount: {order.amount}</p>
-                            <p>adress: {order.address.city} {order.address.country}</p>
-                            <p>order date: {order.createdAt.split("T")[0]}</p>
-                            <p>order status: {order.status}</p>
+                            <ClientOrderDesc>amount: {order.amount}</ClientOrderDesc>
+                            <ClientOrderDesc>adress: {order.address.city} {order.address.country}</ClientOrderDesc>
+                            <ClientOrderDesc>order date: {order.createdAt.split("T")[0]}</ClientOrderDesc>
+                            <ClientOrderDesc>order status: {order.status}</ClientOrderDesc>
                         </ClientOrder>
                     ))}
                 </ClientOrders>

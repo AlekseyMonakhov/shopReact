@@ -154,11 +154,11 @@ const Product = () => {
   const id = location.pathname.split("/")[2];
 
   const [product, setProduct] = useState({});
-  const [productVariant, SetProductVariant] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
+
 
 
   useEffect(() => {
@@ -166,13 +166,14 @@ const Product = () => {
       try {
         const res = await publicRequest.get("/products/find/" + id);
         setProduct(res.data);
-        SetProductVariant(res.data.variant);
       } catch (err) {
         console.log(err);
       }
     };
     getProduct();
-  }, [id]);
+  }, [id, color]);
+
+
 
 
   const handleQuantity = (type) => {
@@ -182,10 +183,9 @@ const Product = () => {
 
 
   const handleClick = () => {
-    const _id = productVariant[0]._id;
+    let _id = product.variant.find((el) => el.color === color && el.size === size)._id;
     dispatch(addProduct({ ...product, quantity, color, size, _id }));
   };
-  console.log(size);
   return (
     <Container>
       <Navbar />
@@ -201,24 +201,29 @@ const Product = () => {
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
-              {product.variant?.map((v, index) => (
-                <React.Fragment key={v._id}>
-                  <FilterColor color={v.color} key={v.color} onClick={() => {
-                    let selectedVariant = product.variant.find(el => el.color === v.color);
-                    setColor(v.color);
-                    setSize(undefined);
-                    SetProductVariant([selectedVariant]);
+              {product.colors?.map((c) => (
+                <React.Fragment key={c}>
+                  <FilterColor color={c} onClick={() => {
+                    setColor(c);
+                    setSize("");
                   }} />
-                  <FilterLabel htmlFor={v.color} color={v.color} key={index} />
+                  <FilterLabel htmlFor={c} color={c} />
                 </React.Fragment>
-              ))}
+              )
+              )}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
-              <FilterSize defaultValue={productVariant[0]?.size} onClick={(e) => setSize(e.target.value)}>
-                {productVariant?.map((v) => (
-                  <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
-                ))}
+              <FilterSize onClick={(e) => setSize(e.target.value)}>
+                {color === "" ?
+                  product.sizes?.map((s) => (
+                    <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                  ))
+                  :
+                  product.variant?.filter((v) => v.color === color).map((v) => (
+                    <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
+                  ))  
+                }
               </FilterSize>
             </Filter>
           </FilterContainer>
@@ -231,7 +236,7 @@ const Product = () => {
             {
               (size && color)
                 ? <Button onClick={handleClick}>ADD TO CART</Button>
-                : <ChoseSizeAndColor style={{fontSize:"12px"}}>Chose size and color</ChoseSizeAndColor>
+                : <ChoseSizeAndColor style={{ fontSize: "12px" }}>Chose size and color</ChoseSizeAndColor>
             }
           </AddContainer>
         </InfoContainer>

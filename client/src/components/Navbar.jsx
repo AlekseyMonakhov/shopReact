@@ -131,7 +131,11 @@ const Navbar = () => {
             <Search style={{ color: "gray", fontSize: 16 }} />
           </SearchContainer>
         </Left>
-        <Center><Logo>Shop</Logo></Center>
+        <Center>
+          <Link to={"/"} style={{color: "black", textDecoration: "none"}}>
+            <Logo>Shop</Logo>
+          </Link>
+        </Center>
         <Right>
           {!currentUser
             ?
