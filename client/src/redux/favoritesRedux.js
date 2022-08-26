@@ -15,7 +15,7 @@ const favoriteSlice = createSlice({
             }
         },
         removeProduct: (state, action) => {
-            let item = state.products.find((product) => product._id === action.payload.id);
+            let item = state.products.find((product) => product._id === action.payload._id);
             state.products.splice(state.products.indexOf(item), 1);
             state.quantity -= 1;
         },

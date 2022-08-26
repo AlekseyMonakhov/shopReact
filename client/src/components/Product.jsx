@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { FavoriteBorderOutlined, SearchOutlined } from "@mui/icons-material";
-import {Link} from "react-router-dom";
-import { addProduct } from "../redux/favoritesRedux";
+import { Link } from "react-router-dom";
+import { addProduct, removeProduct } from "../redux/favoritesRedux";
 import { useDispatch } from "react-redux";
+import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
 
 const Info = styled.div`
   opacity: 0;
@@ -20,31 +22,50 @@ const Info = styled.div`
   cursor: pointer;
 `;
 
+const Title = styled.h5`
+  position: absolute;
+  bottom: 20px;
+  z-index: 5;
+  color: rgba(0, 0, 0, 1);
+  font-size: 28px;
+  letter-spacing: 1.5px;
+  min-width: 60%;
+  border-radius: 25px;
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.75);
+  transition: all 1s ease;
+  cursor: pointer;
+  &::first-letter {
+    
+    font-size: 48px;
+    line-height: 32px;
+    color: rgba(145, 13, 13, 1);
+  }
+`;
+
 const Container = styled.div`
   flex: 1;
-  margin: 5px;
-  min-width: 280px;
-  height: 350px;
+  padding: 5px;
   display: flex;
+  max-width: 250px;
   align-items: center;
   justify-content: center;
   background-color: #f5fbfd;
   position: relative;
+  ${mobile({ minWidth: "50%", maxWidth: "100%" })};
   &:hover ${Info}{
     opacity: 1;
   }
-`;
-
-const Circle = styled.div`
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background-color: white;
-  position: absolute;
+  &:hover ${Title} {
+    opacity: 0;
+  }
 `;
 
 const Image = styled.img`
-  height: 75%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   z-index: 2;
 `;
 
@@ -63,28 +84,49 @@ const Icon = styled.div`
     background-color: #e9f5f5;
     transform: scale(1.1);
   }
+  &:hover a svg {
+    fill: rgba(160, 9, 9, 1);
+  }
+  &:hover>svg {
+    fill: rgba(255, 0, 0, 1);
+  }
 `;
+
 
 
 const Product = ({ item }) => {
   const dispatch = useDispatch();
+  const productsFavorite = useSelector((state) => state.favorite.products);
+  console.log();
+
   const addToFavorites = (prod) => {
     dispatch(addProduct(prod))
   };
+  const removeToFavorites = (prod) => {
+    dispatch(removeProduct(prod))
+  };
   return (
     <Container>
-      <Circle />
       <Image src={item.img} />
       <Info>
         <Icon>
-          <Link to={`/product/${item._id}`}>
+          <Link style={{ color: "black" }} to={`/product/${item._id}`}>
             <SearchOutlined />
           </Link>
         </Icon>
-        <Icon onClick={() => addToFavorites(item)}>
-          <FavoriteBorderOutlined />
-        </Icon>
+        {
+          productsFavorite?.some((el) => el._id === item._id) ?
+            <Icon style={{ color: "red" }} onClick={() => removeToFavorites(item)}>
+              <FavoriteBorderOutlined />
+            </Icon>
+            :
+            <Icon onClick={() => addToFavorites(item)}>
+              <FavoriteBorderOutlined />
+            </Icon>
+
+        }
       </Info>
+      <Title>{item.title}</Title>
     </Container>
   );
 };

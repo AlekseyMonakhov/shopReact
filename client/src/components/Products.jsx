@@ -6,8 +6,8 @@ import axios from "axios";
 const Container = styled.div`
   padding: 20px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-flow: row wrap;
+  justify-content: center;
 `;
 
 const Products = ({ cat, filters, sort }) => {

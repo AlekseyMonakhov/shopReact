@@ -61,7 +61,13 @@ const Center = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
+  -webkit-text-stroke: 1px black;
   ${mobile({ fontSize: "32px" })};
+  &::first-letter {
+    font-size: 38px;
+    line-height: 32px;
+    color: rgba(145, 13, 13, 1);
+  }
 `;
 
 const Right = styled.div`
@@ -132,7 +138,7 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Link to={"/"} style={{color: "black", textDecoration: "none"}}>
+          <Link to={"/"} style={{ color: "black", textDecoration: "none" }}>
             <Logo>Shop</Logo>
           </Link>
         </Center>
@@ -156,7 +162,7 @@ const Navbar = () => {
           </MenuMobileButton>
           <MenuItem onClick={() => setShowFavorite(!showFavorite)}>
             <Badge badgeContent={favorite.quantity} color="primary">
-              <FavoriteBorderOutlined />
+              <FavoriteBorderOutlined style={favorite.quantity ? {color:"red"} : {color:"black"}} />
             </Badge>
           </MenuItem>
           <StyledLink to={"/cart"}>
