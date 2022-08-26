@@ -69,9 +69,8 @@ const Cabinet = () => {
         getUserOrders();
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [clientId,userRequest])
-    console.log(orders);
     return (
         <Container>
             <Navbar />
