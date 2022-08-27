@@ -16,8 +16,8 @@ const ProductSchema = new mongoose.Schema(
         categories: {type: Array},
         img: {type: String, required: true},
         variant: [{type:ProductVariant, required: true}],
-        colors: {type:Array},
-        sizes: {type:Array},
+        colors: {type:Array, required: true},
+        sizes: {type:Array, required: true},
         price: {type: Number, required: true},
         
     },

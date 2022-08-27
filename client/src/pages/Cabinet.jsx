@@ -3,10 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import styled from 'styled-components';
 import { useLocation } from "react-router";
-import { userRequest } from "../requestMethods";
 import { useEffect, useState } from "react";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 
 const Container = styled.div``;
@@ -56,11 +56,15 @@ const Cabinet = () => {
     const location = useLocation();
     const clientId = location.pathname.split("/")[2];
     const [orders, setOrders] = useState([]);
-    const userName = useSelector((state) => state.user.currentUser.username);
+    const userName = useSelector((state) => state.user.currentUser);
     useEffect(() => {
         const getUserOrders = async () => {
             try {
-                const res = await userRequest.get(`/orders/find/${clientId}`);
+                const res = await axios.get(`http://localhost:3001/api/orders/find/${clientId}`, {
+                    headers: {
+                        token: `Bearer ${userName.accessToken}`
+                    },
+                });
                 setOrders(res.data);
             } catch (err) {
                 console.log(err);
@@ -70,23 +74,28 @@ const Cabinet = () => {
 
 
 
-    }, [clientId,userRequest])
+    }, [clientId, userName.accessToken])
     return (
         <Container>
             <Navbar />
             <CabinetContainer>
-                <ClientName>Hello, {userName}</ClientName>
+                <ClientName>Hello, {userName.username}</ClientName>
                 <ClientOrdersTitle>You orders</ClientOrdersTitle>
                 <ClientOrders>
-                    {orders.map((order) => (
-                        <ClientOrder key={order._id}>
-                            <ClientOrderId>Order id: {order._id}</ClientOrderId>
-                            <ClientOrderDesc>amount: {order.amount}</ClientOrderDesc>
-                            <ClientOrderDesc>adress: {order.address.city} {order.address.country}</ClientOrderDesc>
-                            <ClientOrderDesc>order date: {order.createdAt.split("T")[0]}</ClientOrderDesc>
-                            <ClientOrderDesc>order status: {order.status}</ClientOrderDesc>
-                        </ClientOrder>
-                    ))}
+                    {
+                        orders.length ?
+                            orders.map((order) => (
+                                <ClientOrder key={order._id}>
+                                    <ClientOrderId>Order id: {order._id}</ClientOrderId>
+                                    <ClientOrderDesc>amount: {order.amount}</ClientOrderDesc>
+                                    <ClientOrderDesc>adress: {order.address.city} {order.address.country}</ClientOrderDesc>
+                                    <ClientOrderDesc>order date: {order.createdAt.split("T")[0]}</ClientOrderDesc>
+                                    <ClientOrderDesc>order status: {order.status}</ClientOrderDesc>
+                                </ClientOrder>
+                            ))
+                            :
+                            <h4>No orders yet ... </h4>
+                    }
                 </ClientOrders>
             </CabinetContainer>
             <Footer />
