@@ -92,7 +92,6 @@ const Register = () => {
     }
     return true;
   }
-  console.log(chekForm(newUser));
 
   const register = async (e) => {
     try {

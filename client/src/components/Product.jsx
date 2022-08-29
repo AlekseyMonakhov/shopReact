@@ -27,15 +27,17 @@ const Title = styled.h5`
   bottom: 20px;
   z-index: 5;
   color: rgba(0, 0, 0, 1);
-  font-size: 28px;
+  font-size: 120%;
   letter-spacing: 1.5px;
   min-width: 60%;
+  max-width: 90%;
   border-radius: 25px;
   padding: 10px;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.75);
   transition: all 1s ease;
   cursor: pointer;
+  overflow: hidden;
   &::first-letter {
     
     font-size: 48px;
@@ -48,6 +50,7 @@ const Container = styled.div`
   flex: 1;
   padding: 5px;
   display: flex;
+  min-width: 250px;
   max-width: 250px;
   align-items: center;
   justify-content: center;
