@@ -9,7 +9,6 @@ import axios from "axios";
 import { clearCart } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 
-
 const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -23,16 +22,15 @@ const Content = styled.div`
   flex-grow: 1;
   gap: 50px;
   padding: 50px;
-  text-align:center;
+  text-align: center;
 `;
 const HomeButton = styled.button`
   padding: 10px;
   color: white;
-  background-color:black;
+  background-color: black;
   font-size: 18px;
   border-radius: 14px;
-  cursor:pointer;
-
+  cursor: pointer;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -53,15 +51,19 @@ const Success = () => {
   useEffect(() => {
     const createOrder = async () => {
       try {
-        const res = await axios.post("http://localhost:3001/api/orders", {
-          userId: currentUser._id,
-          products: cart.products.map((item) => ({
-            productId: item._id,
-            quantity: item.quantity,
-          })),
-          amount: cart.total,
-          address: data.billing_details.address,
-        }, { headers: { token: `Bearer ${accessToken}` }, });
+        const res = await axios.post(
+          "http://localhost:3001/api/orders",
+          {
+            userId: currentUser._id,
+            products: cart.products.map((item) => ({
+              productId: item._id,
+              quantity: item.quantity,
+            })),
+            amount: cart.total,
+            address: data.billing_details.address,
+          },
+          { headers: { token: `Bearer ${accessToken}` } }
+        );
         setOrderId(res.data._id);
         clear();
       } catch (err) {
@@ -69,25 +71,25 @@ const Success = () => {
       }
     };
     data && cart.total && createOrder();
-      
-    
   }, [cart, data, currentUser, accessToken]);
 
   return (
     <Container>
       <Navbar />
       <Content>
-        {orderId
-          ? <h4>Order has been created successfully. Your order ID is ${orderId}</h4>
-          : <h4>No new orders yet...</h4>}
+        {orderId ? (
+          <h4>
+            Order has been created successfully. Your order ID is ${orderId}
+          </h4>
+        ) : (
+          <h4>No new orders yet...</h4>
+        )}
         <StyledLink to={"/"}>
           <HomeButton>Return to main</HomeButton>
         </StyledLink>
       </Content>
       <Footer />
     </Container>
-
-
   );
 };
 

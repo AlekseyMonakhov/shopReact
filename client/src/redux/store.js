@@ -3,37 +3,39 @@ import cartReducer from "./cartRedux";
 import userReducer from "./userRedux";
 import favoriteReducer from "./favoritesRedux";
 import {
-    persistStore,
-    persistReducer,
-    FLUSH,
-    REHYDRATE,
-    PAUSE,
-    PERSIST,
-    PURGE,
-    REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
-    key: 'root',
-    version: 1,
-    storage,
-}
+  key: "root",
+  version: 1,
+  storage,
+};
 
-
-const rootReducer = combineReducers({ user: userReducer, cart: cartReducer, favorite: favoriteReducer });
+const rootReducer = combineReducers({
+  user: userReducer,
+  cart: cartReducer,
+  favorite: favoriteReducer,
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
 export const store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-            },
-        }),
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export let persistor = persistStore(store);
