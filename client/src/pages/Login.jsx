@@ -8,9 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), 
-  url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
-  center;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+      center;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -33,7 +36,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
-
 
 const Input = styled.input`
   flex: 1;
@@ -67,7 +69,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Error = styled.span`
-  color:  red;
+  color: red;
 `;
 
 const Login = () => {
@@ -86,15 +88,20 @@ const Login = () => {
         <Title>SIGN IN</Title>
         <Form>
           <Input
-            placeholder="username"
+            placeholder='username'
             onChange={(e) => setUsername(e.target.value)}
           />
           <Input
-            placeholder="password"
-            type="password"
+            placeholder='password'
+            type='password'
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={isFetching}>LOGIN</Button>
+          <Button
+            onClick={handleClick}
+            disabled={isFetching}
+          >
+            LOGIN
+          </Button>
           {error && <Error>Something went wrong</Error>}
           <StyledLink to={"/register"}>
             <LinkTitle>CREATE A NEW ACCOUNT</LinkTitle>

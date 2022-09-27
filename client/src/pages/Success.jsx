@@ -71,7 +71,7 @@ const Success = () => {
       }
     };
     data && cart.total && createOrder();
-  }, [cart, data, currentUser, accessToken]);
+  }, [cart.total, cart.products, data, currentUser, accessToken]);
 
   return (
     <Container>

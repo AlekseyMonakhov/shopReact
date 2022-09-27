@@ -68,22 +68,22 @@ const FilterTitle = styled.span`
   font-weight: 200;
 `;
 
-const FilterColor = styled.input.attrs(props => ({
+const FilterColor = styled.input.attrs((props) => ({
   type: "radio",
   name: "color",
   id: props.color,
 }))`
-display: none;
-&:checked+label {
-  scale: 125%;
-}
+  display: none;
+  &:checked + label {
+    scale: 125%;
+  }
 `;
 const FilterLabel = styled.label`
   width: 20px;
   height: 20px;
   border: 1px solid black;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
   cursor: pointer;
 `;
 
@@ -127,7 +127,7 @@ const Button = styled.button`
   background-color: white;
   cursor: pointer;
   font-weight: 500;
-  
+
   &:hover {
     background-color: #f8f4f4;
   }
@@ -140,14 +140,12 @@ const ChoseSizeAndColor = styled.button`
   background-color: white;
   cursor: pointer;
   font-weight: 500;
-  
+
   &:hover {
     background-color: #ffdbd1;
     border: 2px solid black;
   }
 `;
-
-
 
 const Product = () => {
   const location = useLocation();
@@ -158,8 +156,6 @@ const Product = () => {
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
-
-
 
   useEffect(() => {
     const getProduct = async () => {
@@ -173,17 +169,16 @@ const Product = () => {
     getProduct();
   }, [id, color]);
 
-
-
-
   const handleQuantity = (type) => {
-    type === "inc" ? setQuantity(quantity + 1) : quantity > 1 && setQuantity(quantity - 1);
+    type === "inc"
+      ? setQuantity(quantity + 1)
+      : quantity > 1 && setQuantity(quantity - 1);
   };
 
-
-
   const handleClick = () => {
-    let _id = product.variant.find((el) => el.color === color && el.size === size)._id;
+    let _id = product.variant.find(
+      (el) => el.color === color && el.size === size
+    )._id;
     dispatch(addProduct({ ...product, quantity, color, size, _id }));
   };
   return (
@@ -203,27 +198,34 @@ const Product = () => {
               <FilterTitle>Color</FilterTitle>
               {product.colors?.map((c) => (
                 <React.Fragment key={c}>
-                  <FilterColor color={c} onClick={() => {
-                    setColor(c);
-                    setSize("");
-                  }} />
-                  <FilterLabel htmlFor={c} color={c} />
+                  <FilterColor
+                    color={c}
+                    onClick={() => {
+                      setColor(c);
+                      setSize("");
+                    }}
+                  />
+                  <FilterLabel
+                    htmlFor={c}
+                    color={c}
+                  />
                 </React.Fragment>
-              )
-              )}
+              ))}
             </Filter>
             <Filter>
               <FilterTitle>Size</FilterTitle>
               <FilterSize onClick={(e) => setSize(e.target.value)}>
-                {color === "" ?
-                  product.sizes?.map((s) => (
-                    <FilterSizeOption key={s}>{s}</FilterSizeOption>
-                  ))
-                  :
-                  product.variant?.filter((v) => v.color === color).map((v) => (
-                    <FilterSizeOption key={v.size}>{v.size}</FilterSizeOption>
-                  ))  
-                }
+                {color === ""
+                  ? product.sizes?.map((s) => (
+                      <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                    ))
+                  : product.variant
+                      ?.filter((v) => v.color === color)
+                      .map((v) => (
+                        <FilterSizeOption key={v.size}>
+                          {v.size}
+                        </FilterSizeOption>
+                      ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
@@ -233,11 +235,13 @@ const Product = () => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            {
-              (size && color)
-                ? <Button onClick={handleClick}>ADD TO CART</Button>
-                : <ChoseSizeAndColor style={{ fontSize: "12px" }}>Chose size and color</ChoseSizeAndColor>
-            }
+            {size && color ? (
+              <Button onClick={handleClick}>ADD TO CART</Button>
+            ) : (
+              <ChoseSizeAndColor style={{ fontSize: "12px" }}>
+                Chose size and color
+              </ChoseSizeAndColor>
+            )}
           </AddContainer>
         </InfoContainer>
       </Wrapper>

@@ -8,19 +8,18 @@ import { useSelector } from "react-redux";
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { changeQuantity } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 
-
-
-const KEY = "pk_test_51LXUoZKHAec9sp94ocGA9IksEambeKUetYB93jsKWP3F0WFPG6jWNZxUgZFdlxdibCwP7T3wPDUuYWR6ZF3qsHui00MDs1CZ7D";
+const KEY =
+  "pk_test_51LXUoZKHAec9sp94ocGA9IksEambeKUetYB93jsKWP3F0WFPG6jWNZxUgZFdlxdibCwP7T3wPDUuYWR6ZF3qsHui00MDs1CZ7D";
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
-    padding: 20px;
+  padding: 20px;
   ${mobile({ padding: "10px" })};
 `;
 
@@ -40,9 +39,10 @@ const TopButton = styled.button`
   padding: 10px;
   font-weight: 600;
   cursor: pointer;
-  border: ${props => props.type === "filled" && "none"};
-  background-color: ${props => props.type === "filled" ? "black" : "transparent"};
-  color: ${props => props.type === "filled" && "white"};
+  border: ${(props) => props.type === "filled" && "none"};
+  background-color: ${(props) =>
+    props.type === "filled" ? "black" : "transparent"};
+  color: ${(props) => props.type === "filled" && "white"};
 `;
 
 const TopTexts = styled.div`
@@ -102,7 +102,7 @@ const ProductColor = styled.div`
   height: 20px;
   border: 1px solid black;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const ProductSize = styled.span``;
@@ -151,8 +151,8 @@ const SummaryItem = styled.div`
   margin: 30px 0;
   display: flex;
   justify-content: space-between;
-  font-weight: ${props => props.type === "total" && "500"};
-  font-size: ${props => props.type === "total" && "24px"};
+  font-weight: ${(props) => props.type === "total" && "500"};
+  font-size: ${(props) => props.type === "total" && "24px"};
 `;
 const SummaryItemText = styled.span``;
 const SummaryItemPrice = styled.span``;
@@ -174,9 +174,8 @@ const EmptyCart = styled.div`
 `;
 
 const Cart = () => {
-
-  const cart = useSelector(state => state.cart);
-  const user = useSelector(state => state.user);
+  const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
   const quantityFavorite = useSelector((state) => state.favorite.quantity);
   const [stripeToken, setStripeToken] = useState(null);
   const navigate = useNavigate();
@@ -196,18 +195,18 @@ const Cart = () => {
             stripeData: res.data,
             accessToken: user.currentUser.accessToken,
           },
-        })
+        });
       } catch (err) {
         console.log(err);
-      };
-    }
-    if (stripeToken && (cart.quantity >= 1) && user.currentUser) {
+      }
+    };
+    if (stripeToken && cart.quantity >= 1 && user.currentUser) {
       makeRequest();
     }
     if (!user.currentUser) {
       navigate("/login");
     }
-  }, [stripeToken, cart.total, navigate, cart, user.currentUser]);
+  }, [stripeToken, cart.total, cart.quantity, navigate, user.currentUser]);
   const setQuantity = (type, id) => {
     dispatch(changeQuantity({ type, id }));
   };
@@ -227,28 +226,41 @@ const Cart = () => {
             <TopText>Your Wishlist({quantityFavorite})</TopText>
           </TopTexts>
         </Top>
-        {cart.quantity
-          ?
+        {cart.quantity ? (
           <Bottom>
             <Info>
-              {cart.products.map(product => (
+              {cart.products.map((product) => (
                 <Product key={product._id}>
                   <ProductDetail>
                     <Image src={product.img} />
                     <Details>
-                      <ProductName><b>Product:</b> {product.title}</ProductName>
-                      <ProductId><b>ID:</b> {product._id}</ProductId>
+                      <ProductName>
+                        <b>Product:</b> {product.title}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b> {product._id}
+                      </ProductId>
                       <ProductColor color={product.color} />
-                      <ProductSize><b>Size:</b> {product.size}</ProductSize>
+                      <ProductSize>
+                        <b>Size:</b> {product.size}
+                      </ProductSize>
                     </Details>
                   </ProductDetail>
                   <PriceDetail>
                     <ProductAmountContainer>
-                      <Add style={{ cursor: "pointer" }} onClick={() => setQuantity("add", product._id)} />
+                      <Add
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setQuantity("add", product._id)}
+                      />
                       <ProductAmount>{product.quantity}</ProductAmount>
-                      <Remove style={{ cursor: "pointer" }} onClick={() => setQuantity("remove", product._id)} />
+                      <Remove
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setQuantity("remove", product._id)}
+                      />
                     </ProductAmountContainer>
-                    <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                    <ProductPrice>
+                      $ {product.price * product.quantity}
+                    </ProductPrice>
                   </PriceDetail>
                 </Product>
               ))}
@@ -268,12 +280,12 @@ const Cart = () => {
                 <SummaryItemText>Shipping Discount</SummaryItemText>
                 <SummaryItemPrice>$ -5.90</SummaryItemPrice>
               </SummaryItem>
-              <SummaryItem type="total">
+              <SummaryItem type='total'>
                 <SummaryItemText>Total</SummaryItemText>
                 <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
               </SummaryItem>
               <StripeCheckout
-                name="IAMB"
+                name='IAMB'
                 billingAddress
                 shippingAddress
                 description={`Your total is$${cart.total}`}
@@ -282,12 +294,14 @@ const Cart = () => {
                 stripeKey={KEY}
               >
                 <Button>CHECKOUT NOW</Button>
-
               </StripeCheckout>
             </Summary>
           </Bottom>
-          : <EmptyCart><h5>Cart is empty yet ...</h5></EmptyCart>
-        }
+        ) : (
+          <EmptyCart>
+            <h5>Cart is empty yet ...</h5>
+          </EmptyCart>
+        )}
       </Wrapper>
       <Footer />
     </Container>
